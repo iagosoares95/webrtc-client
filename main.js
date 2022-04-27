@@ -12,8 +12,6 @@ var ctcUserAgent = {
 
 var logger;
 
-var my_ip = "";
-
 function applog() {
     for (var i = 0; i < arguments.length; i++) {
         if (typeof arguments[i] == 'object') {
@@ -40,7 +38,7 @@ var setupSession = function(session) {
     });
 
     session.on('accepted', function(data) {
-        applog("<b>Session accepted</b>", data.statusCode);
+        applog("<b>Session accepted</b>");
     });
 
     //called when a response 300-699 is received
@@ -135,31 +133,9 @@ var setupRegisterSession = function(session) {
         uaStatus.innerHTML = "Unregistered";
     });
 
-    session.on('progress', function(response) {
-        applog("Received session progress:", response.statusCode);
-    });
-
-    session.on('accepted', function(data) {
-        applog("<b>Session accepted</b>");
-    });
-
-    session.on('rejected', function(data) {
-        applog("<b>Session rejected</b>");
-    });
-
     session.on('invite', function(context) {
         applog("<b>INVITE received</b>");
         regUserAgent.inviteContext = context;
-        //var toAddr = inviteContext.request.to.toString();
-        // applog("<b>Call from:"<b>")
-    });
-
-    session.on('cancel', function() {
-        applog("<b>Session cancelled</b>");
-    });
-
-    session.on('bye', function(request) {
-        applog("<b>Session bye</b>", request);
     });
 }
 
@@ -210,22 +186,27 @@ var loadFields = function() {
     document.getElementById("txtPassword").value = localStorage.getItem("txtPasswordSave");
 }
 
-async function get_ip() {
-    $.getJSON('https://api.ipify.org?format=jsonp&callback=?', function(data) {
-        console.log(JSON.stringify(data, null, 2));
-        my_ip = (data.ip);
-    });
-}
-
 window.onload = function() {
-
-    var enablevideooc = document.getElementById('enablevideooc');
-    var enablevideoic = document.getElementById('enablevideoic');
-    var enablevideoctc = document.getElementById('enablevideoctc');
 
     logger = document.getElementById('log');
     loadFields();
-    my_ip = get_ip();
+    loadConfig();
+
+    var ua = {
+        transportOptions: {
+            //wsServers: [ txtWebSocketSave.value ],
+            traceSip: true,
+        },
+        uri: txtURI.value,
+        authorizationUser: txtAuthorizationUser.value,
+        contactName: txtAuthorizationUser.value,
+        displayName: txtDisplayName.value,
+        password: txtPassword.value,
+        level: 'debug',
+        userAgentString: 'sipjs-X',
+    };
+
+    ctcUserAgent.userAgent = new SIP.UA(ua);
 
     /**
      * Register handlers
@@ -240,7 +221,7 @@ window.onload = function() {
 
     var regButton = document.getElementById('register');
     regButton.addEventListener('click', function() {
-        var ua = {
+        ua = {
             transportOptions: {
                 wsServers: [txtWebSocket.value],
                 traceSip: true,
@@ -333,11 +314,12 @@ window.onload = function() {
         if (!isRegisterActive()) {
             return;
         }
+
         var inviteContext = regUserAgent.userAgent.invite(txtTargetoc.value, {
             sessionDescriptionHandlerOptions: {
                 constraints: {
                     audio: true,
-                    video: enablevideooc.checked
+                    video: false
                 }
             }
         });
@@ -384,32 +366,11 @@ window.onload = function() {
      */
     var startButtonctc = document.getElementById("startCallctc");
     startButtonctc.addEventListener("click", function() {
-        txtws = txtWebServerctc.value.split('//');
-        txtws = txtws[1].split(':');
-        txtnumber = txtTargetctc.value.split('@');
-        target_call = txtnumber[0];
-        target_server = txtnumber[1];
-        my_name = txtYourNamectc.value + '@' + my_ip;
-
-        if (target_server == null) {
-            target_call = target_call.concat('@', txtws[0]);
-        }
-        var ua_ctc = {
-            transportOptions: {
-                wsServers: [txtWebServerctc.value],
-                traceSip: true,
-            },
-            uri: my_name,
-            contactName: my_name,
-            level: 'debug',
-            userAgentString: 'sipjs-X',
-        }
-        ctcUserAgent.userAgent = new SIP.UA(ua_ctc);
-        var inviteContext = ctcUserAgent.userAgent.invite(target_call, {
+        var inviteContext = ctcUserAgent.userAgent.invite(txtTargetctc.value, {
             sessionDescriptionHandlerOptions: {
                 constraints: {
                     audio: true,
-                    video: enablevideoctc.checked
+                    video: false
                 }
             }
         });
