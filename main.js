@@ -1,10 +1,6 @@
 var userAgents = [];
 var sessions = [];
 
-var elements = {
-    uaStatus: document.getElementById('ua-status'),
-};
-
 var setupSession = function(session) {
     //https://sipjs.com/api/0.15.0/session/#events
 
@@ -33,10 +29,10 @@ var setupSession = function(session) {
 
             var ua_opt = {
                 transportOptions: {
-                    wsServers: ['ws://' + uri.host + ':' + uri.port], // ['ws://webrtc.westus.cloudapp.azure.com:15060'],
+                    wsServers: ['ws://' + uri.host + ':' + uri.port],
                     traceSip: true,
                 },
-                uri: txtURI.value, //'2009@vargas',
+                uri: txtURI.value,
             }
 
             session.logger.log("creating new UA for: ", ua_opt.transportOptions.wsServers);
@@ -101,7 +97,6 @@ var setupSession = function(session) {
     });
 }
 
-
 var _configHandle = function(save) {
     if (!localStorage)
         return;
@@ -117,18 +112,12 @@ var _configHandle = function(save) {
 
     var func = save == true ? save_func : load_func;
 
-    func(txtWebSocket, 'org.register.wsServer');
-    func(txtURI, 'org.register.uri');
-    func(txtAuthorizationUser, 'org.register.authorizationUser');
-    func(txtDisplayName, 'org.register.displayName');
-    func(txtPassword, 'org.register.password');
-    func(txtTarget, 'org.call.target');
-    console.log(txtWebSocket);
+    func(txtWebSocket, 'txtWebSocket');
+    func(txtURI, 'txtURI');
+    func(txtAuthorizationUser, 'txtAuthorizationUser');
+    func(txtDisplayName, 'txtDisplayName');
+    func(txtPassword, 'txtPassword');
     console.log(JSON.stringify(localStorage, false, 4));
-}
-
-var loadConfig = function() {
-    _configHandle(false);
 }
 
 var saveConfig = function() {
@@ -140,71 +129,85 @@ document.addEventListener("DOMContentLoaded", function() {
     uaStatus = document.getElementById("ua-status");
 });
 
+var loadFields = function() {
+    if (!localStorage)
+        return;
+
+    document.getElementById("txtWebSocket").value = localStorage.getItem("txtWebSocket");
+    document.getElementById("txtURI").value = localStorage.getItem("txtURI");
+    document.getElementById("txtAuthorizationUser").value = localStorage.getItem("txtAuthorizationUser");
+    document.getElementById("txtDisplayName").value = localStorage.getItem("txtDisplayName");
+    document.getElementById("txtPassword").value = localStorage.getItem("txtPassword");
+}
+
 window.onload = function() {
-    loadConfig();
-    var options = {
-        media: {
-            local: {
-                //video: document.getElementById('localVideo'),
-                audio: document.getElementById('localVideo')
-            },
-            remote: {
-                //video: document.getElementById('remoteVideo'),
-                // This is necessary to do an audio/video call as opposed to just a video call
-                audio: document.getElementById('remoteVideo')
-            }
-        },
-        ua: {
-            transportOptions: {
-                wsServers: [txtWebSocket.value], // ['ws://webrtc.westus.cloudapp.azure.com:15060'],
-                traceSip: true,
-            },
-            uri: txtURI.value, //'2009@vargas',
-            authorizationUser: txtAuthorizationUser.value, //'2009',
-            contactName: txtAuthorizationUser.value,
-            displayName: txtDisplayName.value, //'',
-            password: txtPassword.value, //'1234',
-            level: 'debug',
-            userAgentString: 'sipjs-X',
-        }
-    };
 
-    var btnSave = document.getElementById('btnSaveConfig');
-    btnSave.addEventListener('click', function() {
-        saveConfig();
-    })
+    //var uaStatus = document.getElementById('ua-status');
+    var ua;
+    var userAgent = new SIP.UA(ua);
 
-    //var simple = new SIP.Web.Simple(options);
-    var userAgent = new SIP.UA(options.ua);
+    loadFields();
+
     window.userAgent = userAgent;
     userAgent.on('invite', function(session) {
         setupSession(session);
         session.accept();
-    })
-
-    var regButton = document.getElementById('register');
-    regButton.addEventListener('click', function() {
-        userAgent.register();
-        //simple.register();
     });
 
+    //Function from register button
+    var regButton = document.getElementById('register');
+    regButton.addEventListener('click', function() {
+        ua = {
+            transportOptions: {
+                wsServers: [txtWebSocket.value],
+                traceSip: true,
+            },
+            uri: txtURI.value,
+            authorizationUser: txtAuthorizationUser.value,
+            contactName: txtAuthorizationUser.value,
+            displayName: txtDisplayName.value,
+            password: txtPassword.value,
+            level: 'debug',
+            userAgentString: 'sipjs-X',
+        };
+        userAgent = new SIP.UA(ua);
+        userAgent.register();
+        saveConfig();
+    });
+
+    //Function from untregister button
     var desregButton = document.getElementById('unregister');
     desregButton.addEventListener('click', function() {
         userAgent.unregister();
     });
 
-    var endButton = document.getElementById('endCall');
-    endButton.addEventListener("click", function() {
+    //Function to end a call at Incoming call section
+    var endButtonic = document.getElementById('dropCallic');
+    endButtonic.addEventListener("click", function() {
+        session.bye();
+        //alert("Call Ended");
+    }, false);
+
+    //Function to end a call at Outgoing call section
+    var endButtonoc = document.getElementById('dropCalloc');
+    endButtonoc.addEventListener("click", function() {
+        session.bye();
+        //alert("Call Ended");
+    }, false);
+
+    //Function to end a call at Click to call section
+    var endButtonctc = document.getElementById('endCallctc');
+    endButtonctc.addEventListener("click", function() {
         session.bye();
         //alert("Call Ended");
     }, false);
 
     userAgent.on('registered', function() {
-        uaStatus.innerHTML = 'Connected (Registered)';
+        uaStatus.innerHTML = 'Registered';
     });
 
     userAgent.on('unregistered', function() {
-        uaStatus.innerHTML = 'Connected (Unregistered)';
+        uaStatus.innerHTML = 'Unregistered';
     });
 
     function onInvite(invitation) {
@@ -215,9 +218,9 @@ window.onload = function() {
         invitation.reject();
     }
 
-    //makes the call
-    var startButton = document.getElementById("startCall");
-    startButton.addEventListener("click", function() {
+    //makes a call at section Outgoing Call, only registered
+    var startButtonoc = document.getElementById("startCalloc");
+    startButtonoc.addEventListener("click", function() {
         var session = userAgent.invite(txtTarget.value, {
             sessionDescriptionHandlerOptions: {
                 constraints: {
@@ -227,11 +230,11 @@ window.onload = function() {
             }
         });
         setupSession(session);
-        //simple.call('2008');
     }, false);
 
-    var ctcButton = document.getElementById("clickToCall");
-    ctcButton.addEventListener("click", function() {
+    //makes a call at section Click to Call
+    var startButtonctc = document.getElementById("startCallctc");
+    startButtonctc.addEventListener("click", function() {
         var session = userAgent.invite(txtTarget.value, {
             sessionDescriptionHandlerOptions: {
                 constraints: {
@@ -241,8 +244,21 @@ window.onload = function() {
             }
         });
         setupSession(session);
-        //simple.call('2008');
     }, false);
 
+    //Cancel the call at section Outgoing call
+    var cancelButtonoc = document.getElementById("cancelCalloc");
+    cancelButtonoc.addEventListener("click", function() {
+        session.terminate();
+    }, false);
+
+    var checkRegButton = document.getElementById("checkRegister");
+    checkRegButton.addEventListener("click", function() {
+        var estado = userAgent.isRegistered();
+        if (estado == true)
+            alert("User is registered!");
+        else
+            alert("User is unregistered");
+    }, false);
 
 }

@@ -9433,7 +9433,7 @@ var ReInviteUserAgentServer = /** @class */ (function (_super) {
      * @param options - Redirect options bucket.
      */
     ReInviteUserAgentServer.prototype.redirect = function (contacts, options) {
-        console.log( "reinvite agent server redirect, not implemente :(");
+        console.log( "reinvite agent server redirect, not implemente :(");//logsip
         if (options === void 0) { options = { statusCode: 302 }; }
         this.dialog.signalingStateRollback();
         this.dialog.reinviteUserAgentServer = undefined; // ACK will be handled by transaction
@@ -10280,8 +10280,8 @@ var LoggerFactory = /** @class */ (function () {
     };
     LoggerFactory.prototype.print = function (levelToLog, category, label, content) {
         if (typeof content === "string") {
-            var date = new Date();
-            var prefix = [date.toLocaleString() + '.' + date.getMilliseconds(), category];
+            var date = new Date();//modify this lines
+            var prefix = [date.toLocaleString() + '.' + date.getMilliseconds(), category];//also this
             if (label) {
                 prefix.push(label);
             }
@@ -11799,7 +11799,7 @@ var InviteUserAgentServer = /** @class */ (function (_super) {
      * @param options - Redirect options bucket.
      */
     InviteUserAgentServer.prototype.redirect = function (contacts, options) {
-        console.log( "received redirect , calling it...");
+        console.log( "received redirect , calling it...");//logsip
         if (options === void 0) { options = { statusCode: 302 }; }
         return _super.prototype.redirect.call(this, contacts, options);
     };

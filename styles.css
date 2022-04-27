@@ -1,3 +1,19 @@
 video {
     border: 1px solid lightgrey;
 }
+
+#configsip {
+  width: 60%;
+  float: left;
+}
+
+#logsip {
+  width: 40%;
+  float: right;
+}
+
+#logsipfield {
+  height:525px;
+  overflow: scroll;
+}
+

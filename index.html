@@ -1,8 +1,8 @@
 <html>
   <head>
-    <link rel="shortcut icon" href="#">
     <!-- HTML4 --> <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <!-- HTML5 --> <meta charset="utf-8"/>
+    <link rel="shortcut icon" href="#" />
     
     <link rel="stylesheet" href="styles.css">
     <script type="text/javascript" src="sip-0.15.10.js"></script>
@@ -12,28 +12,13 @@
     <video id="remoteVideo"></video>
     <video id="localVideo" muted="muted"></video>
     <br/>
-    Target number: <input type="text" id="txtTarget">
-    <br/>
-    <br/>
-    <button id="register">Register</button>
-    <button id="unregister">Unregister</button>
-    <button id="startCall">Start call</button>
-    <button id="endCall">End call</button>
-    <button id="acceptCall">Accept call</button>
-    <button id="rejectCall">Reject call</button>
-    <button id="clickToCall">Click to Call(Unregistered)</button>
-    <br/>
-    <br/>
-      <div id="ua-status">Disconnected</div>
-    <br/>
-    <br/>
+    <div id=configsip>
     <fieldset>
-      <legend>Config</legend>
+      <legend>Register Config</legend>
       <table>
         <tr>
           <td>wsServer</td>
 	  <td><input type="text" id="txtWebSocket" placeholder="ws://<ip-do-vsbc>:<porta>"></td>
-        </tr>
         <tr>
           <td>URI</td>
           <td><input type="text" id="txtURI" placeholder="1234@domain"></td>
@@ -52,10 +37,82 @@
         </tr>
         <tr>
           <td></td>
-          <td><button id="btnSaveConfig">Save config</button></td>
+          <td>
+            <button id="register">Register</button>
+            <button id="unregister">Unregister</button>
+            <button id="checkRegister">isRegistered</button>
+          </td>
+	</tr>
+	<tr>
+	  <td>Status</td>
+          <td>
+            <div id="ua-status">Unregistered</div>
+	  </td>
         </tr>
+    	<br/>
+      </table>
+      <fieldset>
+        <legend>Incoming Call</legend>
+        <table>
+          <tr>
+            <td>Incoming call from: X</td>
+          </tr>
+          <tr>
+            <td>
+              <button id="startCallic">acceptCall</button>
+              <button id="cancelCallic">rejectCall</button>
+              <button id="dropCallic">dropCall</button>
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+      <br/>
+      <fieldset>
+        <legend>Outgoing Call</legend>
+        <table>
+          <tr>
+            <td>Target number: <input type="text" id="txtTargetoc"></td>
+          </tr>
+          <tr>
+            <td>
+              <button id="startCalloc">startCall</button>
+	      <button id="cancelCalloc">cancelCall</button>
+	      <button id="dropCalloc">dropCall</button>
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+    </fieldset>
+    <br/>
+    <fieldset>
+      <legend>Click to Call (Unregistered)</legend>
+        <table>
+          <tr>
+            <td>Host:</td>
+	    <td><input type="text" id="txtIdentityctc"></td>
+          </tr>
+          <tr>
+            <td>To:</td>
+	    <td><input type="text" id="txtTargetctc"></td>
+          </tr>
+	  <tr>
+	    <td></td>
+            <td>
+              <button id="startCallctc">startCall</button>
+              <button id="endCallctc">endCall</button>
+	    </td>
+	  </tr>
+	</table>
+    </fieldset>
+    </div>
+    <div id="logsip">
+    <fieldset id=logsipfield>
+      <legend>Logs</legend>
+      <table id=logsiptable>
       </table>
     </fieldset>
+    </div>
+    
     <script type="text/javascript">
     </script>
 
