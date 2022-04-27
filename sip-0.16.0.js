@@ -10045,7 +10045,8 @@ class LoggerFactory {
     }
     print(levelToLog, category, label, content) {
         if (typeof content === "string") {
-            const prefix = [new Date(), category];
+            const date = new Date();
+            const prefix = [date.toLocaleString() + "." + date.getMilliseconds(), category];
             if (label) {
                 prefix.push(label);
             }
