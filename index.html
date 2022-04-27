@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <link rel="shortcut icon" href="#">
+    <!-- HTML4 --> <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!-- HTML5 --> <meta charset="utf-8"/>
+    
+    <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript" src="sip-0.15.10.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+  </head>
+  <body>
+    <video id="remoteVideo"></video>
+    <video id="localVideo" muted="muted"></video>
+    <br/>
+    Target number: <input type="text" id="txtTarget">
+    <br/>
+    <br/>
+    <button id="register">Register</button>
+    <button id="unregister">Unregister</button>
+    <button id="startCall">Start call</button>
+    <button id="endCall">End call</button>
+    <button id="acceptCall">Accept call</button>
+    <button id="rejectCall">Reject call</button>
+    <button id="clickToCall">Click to Call(Unregistered)</button>
+    <br/>
+    <br/>
+      <div id="ua-status">Disconnected</div>
+    <br/>
+    <br/>
+    <fieldset>
+      <legend>Config</legend>
+      <table>
+        <tr>
+          <td>wsServer</td>
+	  <td><input type="text" id="txtWebSocket" placeholder="ws://<ip-do-vsbc>:<porta>"></td>
+        </tr>
+        <tr>
+          <td>URI</td>
+          <td><input type="text" id="txtURI" placeholder="1234@domain"></td>
+        </tr>
+        <tr>
+          <td>authorization User</td>
+          <td><input type="text" id="txtAuthorizationUser" placeholder="user"></td>
+        </tr>
+        <tr>
+          <td>display name</td>
+          <td><input type="text" id="txtDisplayName" placeholder="display"></td>
+        </tr>
+        <tr>
+          <td>password</td>
+          <td><input type="password" id="txtPassword" placeholder="****"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><button id="btnSaveConfig">Save config</button></td>
+        </tr>
+      </table>
+    </fieldset>
+    <script type="text/javascript">
+    </script>
+
+  </body>
+</html>
