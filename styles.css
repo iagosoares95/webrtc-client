@@ -13,7 +13,11 @@ video {
 }
 
 #logsipfield {
-  height:525px;
-  overflow: scroll;
+  height:540px;
 }
 
+#log {
+  width: 480px;
+  height: 500px;
+  overflow: scroll;
+}
