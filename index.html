@@ -3,9 +3,9 @@
     <!-- HTML4 --> <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <!-- HTML5 --> <meta charset="utf-8"/>
     <link rel="shortcut icon" href="#" />
-
+    
     <link rel="stylesheet" href="styles.css">
-    <script type="text/javascript" src="sip-0.15.11.js"></script>
+    <script type="text/javascript" src="sip-0.16.0.js"></script>
     <script type="text/javascript" src="main.js"></script>
   </head>
   <body>
@@ -56,10 +56,6 @@
         <table>
           <tr>
             <td>Incoming call from: X</td>
-	    <td>
-	      <input type="checkbox" id="enablevideoic">
-              <label for="enablevideoic">EnableVideo</label>
-	    </td>
           </tr>
           <tr>
             <td>
@@ -76,10 +72,6 @@
         <table>
           <tr>
             <td>Target number: <input type="text" id="txtTargetoc"></td>
-            <td>
-              <input type="checkbox" id="enablevideooc">
-              <label for="enablevideooc">EnableVideo</label>
-            </td>
           </tr>
           <tr>
             <td>
@@ -98,10 +90,6 @@
           <tr>
             <td>Host:</td>
 	    <td><input type="text" id="txtIdentityctc"></td>
-            <td>
-              <input type="checkbox" id="enablevideoctc">
-              <label for="enablevideoctc">EnableVideo</label>
-            </td>
           </tr>
           <tr>
             <td>To:</td>
@@ -118,15 +106,13 @@
     </fieldset>
     </div>
     <div id="logsip">
-    <fieldset id="logsipfield">
+    <fieldset id=logsipfield>
       <legend>Logs</legend>
-      <table id="logsiptable">
-        <tr><td><pre id="log"></pre></td></tr>
-        <tr><td><button id="clearLogs">Clear Logs</button></td></tr>
+      <table id=logsiptable>
       </table>
     </fieldset>
     </div>
-
+    
     <script type="text/javascript">
     </script>
 
